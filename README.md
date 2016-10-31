@@ -11,4 +11,7 @@ import "github.com/cqxmzhc/gologger"
 gologger.CustomLogger(traceHandle, infoHandle, warningHandle, errorHandle)
 
 gologger.Info("info test")
+// output
+|I|-|N|-|F|-|O|: 2016/10/31 09:17:19 in [/root/etek/purifiersServer/src/wdserver/wdserver.go:63] <main.main>: []interface {}{"info test"}
 ```
+
