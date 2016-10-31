@@ -3,6 +3,8 @@ package gologger
 import (
     "log"
     "io"
+    "runtime"
+    "fmt"
 )
 
 
@@ -22,33 +24,41 @@ func CustomLogger(
 
     trace = log.New(traceHandle,
                     "|T|-|R|-|A|-|C|-|E|: ",
-                    log.Ldate|log.Ltime|log.Lshortfile)
+                    log.Ldate|log.Ltime)
 
     info = log.New(infoHandle,
                     "|I|-|N|-|F|-|O|: ",
-                    log.Ldate|log.Ltime|log.Lshortfile)
+                    log.Ldate|log.Ltime)
 
     warning = log.New(warningHandle,
                     "|W|-|A|-|R|-|N|-|I|-|N|-|G|: ",
-                    log.Ldate|log.Ltime|log.Lshortfile)
+                    log.Ldate|log.Ltime)
 
     errorLogger = log.New(errorHandle,
                     "|E|-|R|-|R|-|O|-|R|: ",
-                    log.Ldate|log.Ltime|log.Lshortfile)
+                    log.Ldate|log.Ltime)
 }
 
-func Info(infoMsg string) {
-    info.Println(infoMsg)
+func getDetail(logMsg interface{}) (detail string) {
+    pc, fn, line, _ := runtime.Caller(2)
+    detail = fmt.Sprintf("in [%s:%d] <%s>: %#v",
+                        fn, line, runtime.FuncForPC(pc).Name(), logMsg)
+
+    return
 }
 
-func Trace(traceMsg string) {
-    trace.Println(traceMsg)
+func Info(v ...interface{}) {
+    info.Println(getDetail(v))
 }
 
-func Error(errorMsg string) {
-    errorLogger.Println(errorMsg)
+func Trace(v ...interface{}) {
+    trace.Println(getDetail(v))
 }
 
-func Warning(warningMsg string) {
-    warning.Println(warningMsg)
+func Error(v ...interface{}) {
+    errorLogger.Println(getDetail(v))
+}
+
+func Warning(v ...interface{}) {
+    warning.Println(getDetail(v))
 }
